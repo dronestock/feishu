@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	drone.New(newPlugin).Boot()
+	drone.New(core.NewPlugin).Boot()
 }
