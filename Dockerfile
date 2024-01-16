@@ -5,8 +5,7 @@ LABEL author="storezhang<华寅>" \
     email="storezhang@gmail.com" \
     qq="160290688" \
     wechat="storezhang" \
-    # TODO 增加描述信息
-    description="Drone持续集成Docker插件，增加以下功能：1、xxx；2、xxx"
+    description="Drone持续集成飞书插件，用来做通知使用"
 
 
 # 复制文件
@@ -14,11 +13,6 @@ COPY plugin /bin
 
 
 RUN set -ex \
-    \
-    \
-    \
-    && apk update \
-    && apk --no-cache add docker \
     \
     \
     \

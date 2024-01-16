@@ -1,15 +1,16 @@
-# 项目
-[![编译状态](https://github.ruijc.com:20443/api/badges/dronestock/drone/status.svg)](https://github.ruijc.com:20443/dronestock/drone)
-[![Golang质量](https://goreportcard.com/badge/github.com/dronestock/drone)](https://goreportcard.com/report/github.com/dronestock/drone)
-![版本](https://img.shields.io/github/go-mod/go-version/dronestock/drone)
-![仓库大小](https://img.shields.io/github/repo-size/dronestock/drone)
-![最后提交](https://img.shields.io/github/last-commit/dronestock/drone)
-![授权协议](https://img.shields.io/github/license/dronestock/drone)
-![语言个数](https://img.shields.io/github/languages/count/dronestock/drone)
-![最佳语言](https://img.shields.io/github/languages/top/dronestock/drone)
-![星星个数](https://img.shields.io/github/stars/dronestock/drone?style=social)
+# 飞书
+[![编译状态](https://github.ruijc.com:20443/api/badges/dronestock/feishu/status.svg)](https://github.ruijc.com:20443/dronestock/feishu)
+[![Golang质量](https://goreportcard.com/badge/github.com/dronestock/feishu)](https://goreportcard.com/report/github.com/dronestock/feishu)
+![版本](https://img.shields.io/github/go-mod/go-version/dronestock/feishu)
+![仓库大小](https://img.shields.io/github/repo-size/dronestock/feishu)
+![最后提交](https://img.shields.io/github/last-commit/dronestock/feishu)
+![授权协议](https://img.shields.io/github/license/dronestock/feishu)
+![语言个数](https://img.shields.io/github/languages/count/dronestock/feishu)
+![最佳语言](https://img.shields.io/github/languages/top/dronestock/feishu)
+![星星个数](https://img.shields.io/github/stars/dronestock/feishu?style=social)
 
-Drone插件模板，要编写Drone插件，可以从此模板开始创建项目
+飞书插件，支持如下功能
+- 消息通知
 
 ## 使用
 
@@ -50,4 +51,4 @@ Drone插件模板，要编写Drone插件，可以从此模板开始创建项目
 
 本项目通过`Jetbrains开源许可IDE`编写源代码，特此感谢
 
-[![Jetbrains图标](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/?from=dronestock/drone)
+[![Jetbrains图标](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/?from=dronestock/feishu)
