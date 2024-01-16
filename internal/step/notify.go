@@ -60,8 +60,8 @@ func (n *Notify) makeRequest() (req *message.Request, err error) {
 	default:
 		card.Id = n.card.Success
 	}
-	card.Variable[constant.CardProject] = "test"
-	card.Variable[constant.CardName] = "test"
+	card.Variable[constant.CardProject] = n.base.Value(constant.DroneBuildLink)
+	card.Variable[constant.CardName] = n.base.Value(constant.DroneBuildLink)
 	card.Variable[constant.CardUrl] = n.base.Value(constant.DroneBuildLink)
 
 	if bytes, me := json.Marshal(card); nil != me {
