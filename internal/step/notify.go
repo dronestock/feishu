@@ -63,6 +63,8 @@ func (n *Notify) makeRequest() (req *message.Request, err error) {
 	card.Variable["name"] = n.base.Value("REPO").String()
 	card.Variable["url"] = n.base.Value("BUILD_LINK").String()
 	card.Variable["repository"] = n.base.Value("REPO_LINK").String()
+	card.Variable["commit"] = n.base.Value("COMMIT_LINK").String()
+	card.Variable["message"] = n.base.Value("COMMIT_MESSAGE").String()
 	card.Variable["timestamp"] = n.base.Value("BUILD_CREATED").Timestamp()
 
 	content := new(message.Content)
