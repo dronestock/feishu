@@ -1,6 +1,7 @@
 package constant
 
 const (
+	// nolint:gosec
 	TokenUrl               = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
 	MessageUrl             = "https://open.feishu.cn/open-apis/im/v1/messages"
 	MessageTypeInteractive = "interactive"

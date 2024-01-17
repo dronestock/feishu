@@ -33,7 +33,7 @@ func (n *Notify) Runnable() bool {
 }
 
 func (n *Notify) Run(ctx *context.Context) (err error) {
-	if token, ok := (*ctx).Value(constant.KeyToken).(string); !ok {
+	if token, ok := (*ctx).Value(constant.ContextKeyToken).(string); !ok {
 		err = exception.New().Message("没有正确的授权码").Build()
 	} else if request, mre := n.makeRequest(); nil != mre {
 		err = mre

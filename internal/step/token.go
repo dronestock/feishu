@@ -36,7 +36,7 @@ func (t *Token) Run(ctx *context.Context) (err error) {
 	} else if response.IsError() {
 		err = exception.New().Message("飞书返回错误").Build()
 	} else {
-		*ctx = context.WithValue(*ctx, constant.KeyToken, rsp.Token)
+		*ctx = context.WithValue(*ctx, constant.ContextKeyToken, rsp.Token)
 	}
 
 	return

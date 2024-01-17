@@ -1,3 +1,5 @@
 package constant
 
-const KeyToken = "token"
+const ContextKeyToken ContextKey = "token"
+
+type ContextKey string
