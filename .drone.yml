@@ -135,6 +135,10 @@ steps:
   - name: 通知
     image: ccr.ccs.tencentyun.com/dronestock/feishu
     pull: always
+    when:
+      status:
+        - success
+        - failure
     settings:
       id:
         from_secret: feishu_id
