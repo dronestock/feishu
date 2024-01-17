@@ -65,7 +65,10 @@ func (n *Notify) makeRequest() (req *message.Request, err error) {
 	card.Variable["repository"] = n.base.Value("REPO_LINK").String()
 	card.Variable["timestamp"] = n.base.Value("BUILD_CREATED").Timestamp()
 
-	if bytes, me := json.Marshal(card); nil != me {
+	content := new(message.Content)
+	content.Type = "template"
+	content.Data = card
+	if bytes, me := json.Marshal(content); nil != me {
 		err = me
 	} else {
 		req.Content = string(bytes)
