@@ -52,7 +52,7 @@ func (n *Notify) makeRequest() (req *message.Request, err error) {
 
 	card := new(message.Card)
 	card.Variable = make(map[string]any)
-	switch n.base.Value(constant.DroneStatus) {
+	switch n.base.Value(constant.DroneStatus).String() {
 	case constant.DroneStatusSuccess:
 		card.Id = n.card.Success
 	case constant.DroneStatusFailure:
