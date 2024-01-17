@@ -132,7 +132,7 @@ steps:
           - name: $${NAME}-$${VERSION}-darwin-amd64
             file: $${OUTPUT_MAC}
 
-  - name: 发布
+  - name: 通知
     image: ccr.ccs.tencentyun.com/dronestock/feishu
     pull: always
     settings:
