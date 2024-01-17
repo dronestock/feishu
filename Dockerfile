@@ -9,7 +9,7 @@ LABEL author="storezhang<华寅>" \
 
 
 # 复制文件
-COPY plugin /bin
+COPY feishu /bin
 
 
 RUN set -ex \
@@ -17,7 +17,7 @@ RUN set -ex \
     \
     \
     # 增加执行权限
-    && chmod +x /bin/plugin \
+    && chmod +x /bin/feishu \
     \
     \
     \
@@ -25,4 +25,4 @@ RUN set -ex \
 
 
 # 执行命令
-ENTRYPOINT /bin/plugin
+ENTRYPOINT /bin/feishu
