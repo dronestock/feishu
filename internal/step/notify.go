@@ -84,7 +84,7 @@ func (n *Notify) send(ctx *context.Context, req *message.Request, token string) 
 	if response, pe := http.SetQueryParam(constant.ReceiveType, idType).Post(constant.MessageUrl); nil != pe {
 		err = pe
 	} else if response.IsError() {
-		err = exception.New().Message("飞书返回错误").Build()
+		err = exception.New().Message("飞书返回错误").Field(field.New("response", string(response.Body()))).Build()
 	} else {
 		n.base.Debug("发送消息成功", field.New("response", rsp))
 	}
