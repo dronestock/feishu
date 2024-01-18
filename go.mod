@@ -3,7 +3,7 @@ module github.com/dronestock/feishu
 go 1.21
 
 require (
-	github.com/dronestock/drone v1.1.1
+	github.com/dronestock/drone v1.1.2
 	github.com/goexl/exception v0.0.1
 	github.com/goexl/gox v0.3.8
 	github.com/rs/xid v1.5.0

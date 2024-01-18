@@ -68,7 +68,7 @@ func (n *Notify) makeRequest() (req *message.Request, err error) {
 	card.Variable["commit"] = n.base.Value("COMMIT_LINK").String()
 	card.Variable["message"] = n.base.Value("COMMIT_MESSAGE").String()
 	card.Variable["created"] = n.base.Value("BUILD_CREATED").Timestamp()
-	card.Variable["finished"] = n.base.Value("BUILD_FINISHED").Timestamp()
+	card.Variable["finished"] = n.base.Value("BUILD_STARTED").Timestamp()
 	card.Variable["elapsed"] = n.base.Elapsed().Truncate(time.Second).String()
 
 	content := new(message.Content)
