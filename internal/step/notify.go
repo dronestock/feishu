@@ -3,6 +3,7 @@ package step
 import (
 	"context"
 	"encoding/json"
+	"time"
 
 	"github.com/dronestock/drone"
 	"github.com/dronestock/feishu/internal/config"
@@ -66,7 +67,9 @@ func (n *Notify) makeRequest() (req *message.Request, err error) {
 	card.Variable["repository"] = n.base.Value("REPO_LINK").String()
 	card.Variable["commit"] = n.base.Value("COMMIT_LINK").String()
 	card.Variable["message"] = n.base.Value("COMMIT_MESSAGE").String()
-	card.Variable["timestamp"] = n.base.Value("BUILD_CREATED").Timestamp()
+	card.Variable["created"] = n.base.Value("BUILD_CREATED").Timestamp()
+	card.Variable["started"] = n.base.Value("BUILD_STARTED").Timestamp()
+	card.Variable["elapsed"] = n.base.Elapsed().Truncate(time.Second).String()
 
 	content := new(message.Content)
 	content.Type = "template"
