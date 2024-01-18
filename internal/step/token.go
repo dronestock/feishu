@@ -8,6 +8,7 @@ import (
 	"github.com/dronestock/feishu/internal/step/internal/constant"
 	"github.com/dronestock/feishu/internal/step/internal/feishu/token"
 	"github.com/goexl/exception"
+	"github.com/goexl/gox/field"
 )
 
 type Token struct {
@@ -34,7 +35,7 @@ func (t *Token) Run(ctx *context.Context) (err error) {
 	if response, pe := t.base.Http().R().SetContext(*ctx).SetBody(req).SetResult(rsp).Post(constant.TokenUrl); nil != pe {
 		err = pe
 	} else if response.IsError() {
-		err = exception.New().Message("飞书返回错误").Build()
+		err = exception.New().Message("飞书返回错误").Field(field.New("response", string(response.Body()))).Build()
 	} else {
 		*ctx = context.WithValue(*ctx, constant.ContextKeyToken, rsp.Token)
 	}
