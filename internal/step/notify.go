@@ -2,18 +2,24 @@ package step
 
 import (
 	"context"
-	"encoding/json"
+	_ "embed"
+	"strings"
 	"time"
 
 	"github.com/dronestock/drone"
 	"github.com/dronestock/feishu/internal/config"
 	"github.com/dronestock/feishu/internal/step/internal/constant"
 	"github.com/dronestock/feishu/internal/step/internal/feishu/message"
+	"github.com/dronestock/feishu/internal/step/internal/notify"
 	"github.com/goexl/exception"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
+	"github.com/goexl/gox/tpl"
 	"github.com/rs/xid"
 )
+
+//go:embed internal/notify/template.gohtml
+var defaultNotifyTemplate []byte
 
 type Notify struct {
 	base *drone.Base
@@ -51,35 +57,26 @@ func (n *Notify) makeRequest() (req *message.Request, err error) {
 	req.Receive = n.user.Id
 	req.Type = constant.MessageTypeInteractive
 
-	card := new(message.Card)
-	card.Variable = make(map[string]any)
-	switch n.base.Value("BUILD_STATUS").String() {
-	case constant.DroneStatusSuccess:
-		card.Id = n.card.Success
-	case constant.DroneStatusFailure:
-		card.Id = n.card.Failure
-		card.Variable["steps"] = n.base.Value("FAILED_STEPS").String()
-	default:
-		card.Id = n.card.Success
-	}
-	card.Variable["name"] = n.base.Value("REPO").String()
-	card.Variable["url"] = n.base.Value("BUILD_LINK").String()
-	card.Variable["repository"] = n.base.Value("REPO_LINK").String()
-	card.Variable["commit"] = n.base.Value("COMMIT_LINK").String()
-	card.Variable["message"] = n.base.Value("COMMIT_MESSAGE").String()
-	card.Variable["created"] = n.base.Value("BUILD_CREATED").Timestamp()
-	card.Variable["finished"] = n.base.Value("BUILD_STARTED").Timestamp()
-	card.Variable["elapsed"] = n.base.Elapsed().Truncate(time.Second).String()
-	card.Variable["pr"] = n.base.Value("COMMIT_LINK").String()
+	request := new(notify.Request)
+	build := new(notify.Build)
+	build.Status = n.base.Value("BUILD_STATUS").String()
+	build.Url = n.base.Value("BUILD_LINK").String()
+	build.Name = n.base.Value("REPO").String()
+	build.Created = n.base.Value("BUILD_CREATED").Time()
+	build.Finished = n.base.Value("BUILD_STARTED").Time()
+	build.Elapsed = n.base.Elapsed().Truncate(time.Second)
+	build.Steps = strings.Split(n.base.Value("FAILED_STEPS").String(), ",")
+	request.Build = build
 
-	content := new(message.Content)
-	content.Type = "template"
-	content.Data = card
-	if bytes, me := json.Marshal(content); nil != me {
-		err = me
-	} else {
-		req.Content = string(bytes)
-	}
+	code := new(notify.Code)
+	code.Pr = n.base.Value("COMMIT_LINK").String()
+	code.Repository = n.base.Value("REPO_LINK").String()
+	code.Commit = n.base.Value("COMMIT_LINK").String()
+	code.Message = n.base.Value("COMMIT_MESSAGE").String()
+	request.Code = code
+
+	// 加载模板
+	req.Content, err = n.load(request)
 
 	return
 }
@@ -94,6 +91,23 @@ func (n *Notify) send(ctx *context.Context, req *message.Request, token string) 
 		err = exception.New().Message("飞书返回错误").Field(field.New("response", string(response.Body()))).Build()
 	} else {
 		n.base.Debug("发送消息成功", field.New("response", rsp))
+	}
+
+	return
+}
+
+func (n *Notify) load(req *notify.Request) (content string, err error) {
+	if "" != n.card.Template {
+		content, err = tpl.New(n.card.Template).File().Data(req).Build().ToString()
+	} else {
+		content, err = tpl.New(string(defaultNotifyTemplate)).Data(req).Build().ToString()
+	}
+
+	if nil == err { // ! 去掉所有空白字符，不然会报格式错误
+		content = strings.ReplaceAll(content, "\n", "")
+		content = strings.ReplaceAll(content, " ", "")
+		// ! 增加原有的空格
+		content = strings.ReplaceAll(content, "${space}", " ")
 	}
 
 	return

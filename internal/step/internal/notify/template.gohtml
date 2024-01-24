@@ -1,0 +1,69 @@
+{
+  "config": {
+    "wide_screen_mode": true
+  },
+  "header": {
+    "template": "{{- if eq .Build.Status "success" }}green{{- else if eq .Build.Status "failure" }}red{{ end }}",
+    "title": {
+      "tag": "plain_text",
+      "i18n": {
+        "zh_cn": "{{- if eq .Build.Status "success" }}执行成功{{- else if eq .Build.Status "failure" }}执行失败{{ end }}"
+      }
+    }
+  },
+  "i18n_elements": {
+    "zh_cn": [
+      {
+        "tag": "markdown",
+        "content": "**构建项目**：[{{ .Build.Name }}]({{ .Code.Repository }})\n
+**提交消息**：[{{ .Code.Message }}]({{ .Code.Commit }})\n
+**创建时间**：{{ .Build.Created }}\n
+**结束时间**：{{ .Build.Finished }}\n
+**构建耗时**：{{ .Build.Elapsed }}\n
+{{ if .Build.Steps }}
+**出错步骤**：\n
+  {{ range .Build.Steps }}
+  {{ /*使用${space}来代替空格*/ }}
+  ${space}${space}- ${space}{{ . }}\n
+  {{- end }}
+{{- end }}"
+      },
+      {
+        "tag": "hr"
+      },
+      {
+        "tag": "action",
+        "actions": [
+          {
+            "tag": "button",
+            "text": {
+              "tag": "plain_text",
+              "content": "{{- if eq .Build.Status "success" }}构建详情{{- else if eq .Build.Status "failure" }}看看是哪错了{{ end }}"
+            },
+            "type": "{{- if eq .Build.Status "success" }}primary{{- else if eq .Build.Status "failure" }}danger{{ end }}",
+            "multi_url": {
+              "url": "{{ .Build.Url }}",
+              "pc_url": "",
+              "android_url": "",
+              "ios_url": ""
+            }
+          },
+          {
+            "tag": "button",
+            "text": {
+              "tag": "plain_text",
+              "content": "代码变化"
+            },
+            "type": "default",
+            "multi_url": {
+              "url": "{{- .Code.Pr }}",
+              "pc_url": "",
+              "android_url": "",
+              "ios_url": ""
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
