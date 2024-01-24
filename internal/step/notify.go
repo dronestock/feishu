@@ -65,7 +65,7 @@ func (n *Notify) makeRequest() (req *message.Request, err error) {
 	build.Created = n.base.Value("BUILD_CREATED").Time()
 	build.Finished = n.base.Value("BUILD_STARTED").Time()
 	build.Elapsed = n.base.Elapsed().Truncate(time.Second)
-	build.Steps = strings.Split(n.base.Value("FAILED_STEPS").String(), ",")
+	build.Steps = n.base.Value("FAILED_STEPS").Slices()
 	request.Build = build
 
 	code := new(notify.Code)
