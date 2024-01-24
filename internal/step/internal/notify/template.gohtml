@@ -21,9 +21,10 @@
 **结束时间**：{{ .Build.Finished }}\n
 **构建耗时**：{{ .Build.Elapsed }}\n
 {{ if .Build.Steps }}
+\n ---\n
 **出错步骤**：\n
   {{- range .Build.Steps }}
-  - {{ . }}\n
+  - <text_tag color='red'>{{ . }}</text_tag>\n
   {{- end }}
 {{- end }}"
       },
