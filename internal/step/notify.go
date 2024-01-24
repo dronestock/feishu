@@ -105,9 +105,6 @@ func (n *Notify) load(req *notify.Request) (content string, err error) {
 
 	if nil == err { // ! 去掉所有空白字符，不然会报格式错误
 		content = strings.ReplaceAll(content, "\n", "")
-		content = strings.ReplaceAll(content, " ", "")
-		// ! 增加原有的空格
-		content = strings.ReplaceAll(content, "${space}", " ")
 	}
 
 	return

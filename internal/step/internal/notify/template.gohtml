@@ -22,9 +22,8 @@
 **构建耗时**：{{ .Build.Elapsed }}\n
 {{ if .Build.Steps }}
 **出错步骤**：\n
-  {{ range .Build.Steps }}
-  {{ /*使用${space}来代替空格*/ }}
-  ${space}${space}- ${space}{{ . }}\n
+  {{- range .Build.Steps }}
+  - {{ . }}\n
   {{- end }}
 {{- end }}"
       },
