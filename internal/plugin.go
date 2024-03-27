@@ -10,10 +10,10 @@ import (
 
 type plugin struct {
 	drone.Base
+
 	config.App  `default:"${APP}" json:"app,omitempty"`
 	config.Card `default:"${CARD}" json:"card,omitempty"`
 	config.User `default:"${USER}" json:"user,omitempty"`
-
 	// 未找到用户时推送的默认用户
 	config.Notfound `default:"${NOTFOUND}" json:"notfound,omitempty"`
 }
