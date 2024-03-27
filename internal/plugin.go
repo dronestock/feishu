@@ -29,7 +29,7 @@ func (p *plugin) Config() drone.Config {
 func (p *plugin) Steps() drone.Steps {
 	return drone.Steps{
 		drone.NewStep(step.NewToken(&p.Base, &p.App)).Name("授权").Build(),
-		drone.NewStep(step.NewNotify(&p.Base, &p.Card, &p.User)).Name("通知").Build(),
+		drone.NewStep(step.NewNotify(&p.Base, &p.Card, &p.User, &p.Notfound)).Name("通知").Build(),
 	}
 }
 
