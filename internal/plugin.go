@@ -15,7 +15,7 @@ type plugin struct {
 	config.User `default:"${USER}" json:"user,omitempty"`
 
 	// 未找到用户时推送的默认用户
-	Notfound config.Notfound `default:"${NOTFOUND}" json:"notfound,omitempty"`
+	config.Notfound `default:"${NOTFOUND}" json:"notfound,omitempty"`
 }
 
 func New() drone.Plugin {
