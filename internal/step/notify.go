@@ -11,6 +11,7 @@ import (
 	"github.com/dronestock/feishu/internal/step/internal/constant"
 	"github.com/dronestock/feishu/internal/step/internal/feishu/message"
 	"github.com/dronestock/feishu/internal/step/internal/notify"
+	"github.com/go-resty/resty/v2"
 	"github.com/goexl/exception"
 	"github.com/goexl/gox"
 	"github.com/goexl/gox/field"
@@ -22,16 +23,18 @@ import (
 var defaultNotifyTemplate []byte
 
 type Notify struct {
-	base *drone.Base
-	card *config.Card
-	user *config.User
+	base     *drone.Base
+	card     *config.Card
+	user     *config.User
+	notfound *config.Notfound
 }
 
-func NewNotify(base *drone.Base, card *config.Card, user *config.User) *Notify {
+func NewNotify(base *drone.Base, card *config.Card, user *config.User, notfound *config.Notfound) *Notify {
 	return &Notify{
-		base: base,
-		card: card,
-		user: user,
+		base:     base,
+		card:     card,
+		user:     user,
+		notfound: notfound,
 	}
 }
 
@@ -88,7 +91,7 @@ func (n *Notify) send(ctx *context.Context, req *message.Request, token string) 
 	if response, pe := http.SetQueryParam(constant.ReceiveType, idType).Post(constant.MessageUrl); nil != pe {
 		err = pe
 	} else if response.IsError() {
-		err = exception.New().Message("飞书返回错误").Field(field.New("response", string(response.Body()))).Build()
+		err = n.onError(ctx, token, response, req, rsp)
 	} else {
 		n.base.Debug("发送消息成功", field.New("response", rsp))
 	}
@@ -105,6 +108,23 @@ func (n *Notify) load(req *notify.Request) (content string, err error) {
 
 	if nil == err { // ! 去掉所有空白字符，不然会报格式错误
 		content = strings.ReplaceAll(content, "\n", "")
+	}
+
+	return
+}
+
+func (n *Notify) onError(
+	ctx *context.Context, token string,
+	response *resty.Response,
+	req *message.Request, rsp *message.Response,
+) (err error) {
+	if constant.CodeUserNotfound == rsp.Code {
+		req.Receive = n.notfound.Id
+		req.Type = n.notfound.Type
+		n.base.Warn("未找到用户，发送消息给默认用户", field.New("user", n.user), field.New("notfound", n.notfound))
+		err = n.send(ctx, req, token)
+	} else {
+		err = exception.New().Message("飞书返回错误").Field(field.New("response", string(response.Body()))).Build()
 	}
 
 	return

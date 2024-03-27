@@ -7,4 +7,6 @@ const (
 	MessageTypeInteractive = "interactive"
 	ReceiveType            = "receive_id_type"
 	ReceiveTypeStaff       = "_id"
+
+	CodeUserNotfound = 99992360
 )
