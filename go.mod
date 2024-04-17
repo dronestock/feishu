@@ -4,6 +4,7 @@ go 1.21
 
 require (
 	github.com/dronestock/drone v1.1.8
+	github.com/go-resty/resty/v2 v2.11.0
 	github.com/goexl/exception v0.0.1
 	github.com/goexl/gox v0.3.8
 	github.com/rs/xid v1.5.0
@@ -16,7 +17,6 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.17.0 // indirect
-	github.com/go-resty/resty/v2 v2.11.0 // indirect
 	github.com/goexl/baozheng v0.0.1 // indirect
 	github.com/goexl/env v0.0.2 // indirect
 	github.com/goexl/gex v0.3.2 // indirect
