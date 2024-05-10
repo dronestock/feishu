@@ -45,9 +45,10 @@ clone:
 
 environment:
   NAME: feishu
-  OUTPUT_LINUX: feishu.amd64.lin
-  OUTPUT_WINDOWS: feishu.amd64.exe
-  OUTPUT_MAC: feishu.amd64.mac
+  OUTPUT_LINUX_DIR: dist/linux
+  OUTPUT_LINUX_ARM_V7: arm/v7
+  OUTPUT_LINUX_ARM64: arm64
+  OUTPUT_LINUX_AMD64: amd64
   CHANGELOG_TAG_OUTPUT: CHANGELOG.tag.md
 
 
@@ -64,18 +65,16 @@ steps:
         path: /var/lib/go
     settings:
       outputs:
-        - name: $${NAME}
+        - name: $${OUTPUT_LINUX_DIR}/$${OUTPUT_LINUX_AMD64}/$${NAME}
           os: linux
           arch: amd64
-        - name: $${OUTPUT_LINUX}
+        - name: $${OUTPUT_LINUX_DIR}/$${OUTPUT_LINUX_ARM64}/$${NAME}
           os: linux
-          arch: amd64
-        - name: $${OUTPUT_WINDOWS}
-          os: windows
-          arch: amd64
-        - name: $${OUTPUT_MAC}
-          os: darwin
-          arch: amd64
+          arch: arm64
+        - name: $${OUTPUT_LINUX_DIR}/$${OUTPUT_LINUX_ARM_V7}/$${NAME}
+          os: linux
+          arch: arm
+          arm: 7
 
   - name: 推送
     image: ccr.ccs.tencentyun.com/dronestock/docker
@@ -91,13 +90,17 @@ steps:
         from_secret: password_ccr
     settings:
       repository: dronestock/$${NAME}
+      platforms:
+        - arch: amd64
+        - arch: arm64
+        - arch: arm
+          variant: v7
       registries:
         - username: dronestock
           password: $${PASSWORD_DOCKER}
         - hostname: ccr.ccs.tencentyun.com
           username: "160290688"
           password: $${PASSWORD_CCR}
-          required: true
 
   - name: 改变
     image: ccr.ccs.tencentyun.com/dronestock/changelog
@@ -126,11 +129,11 @@ steps:
         body: file('$${CHANGELOG_TAG_OUTPUT}')
         assets:
           - name: $${NAME}-$${VERSION}-linux-amd64
-            file: $${OUTPUT_LINUX}
-          - name: $${NAME}-$${VERSION}-windows-amd64.exe
-            file: $${OUTPUT_WINDOWS}
-          - name: $${NAME}-$${VERSION}-darwin-amd64
-            file: $${OUTPUT_MAC}
+            file: $${OUTPUT_LINUX_DIR}/$${OUTPUT_LINUX_AMD64}/$${NAME}
+          - name: $${NAME}-$${VERSION}-linux-arm64
+            file: $${OUTPUT_LINUX_DIR}/$${OUTPUT_LINUX_ARM64}/$${NAME}
+          - name: $${NAME}-$${VERSION}-linux-armv7
+            file: $${OUTPUT_LINUX_DIR}/$${OUTPUT_LINUX_ARM_V7}/$${NAME}
 
   - name: 通知
     image: ccr.ccs.tencentyun.com/dronestock/feishu
@@ -144,6 +147,8 @@ steps:
         from_secret: feishu_id
       secret:
         from_secret: feishu_secret
+      notfound:
+        id: storezhang
 
 
 volumes:

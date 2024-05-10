@@ -9,7 +9,9 @@ LABEL author="storezhang<华寅>" \
 
 
 # 复制文件
-COPY feishu /bin
+# 复制执行程序
+ARG TARGETPLATFORM
+COPY dist/${TARGETPLATFORM}/feishu /usr/local/bin/feishu
 
 
 RUN set -ex \
@@ -17,7 +19,7 @@ RUN set -ex \
     \
     \
     # 增加执行权限
-    && chmod +x /bin/feishu \
+    && chmod +x /usr/local/bin/feishu \
     \
     \
     \
@@ -25,4 +27,4 @@ RUN set -ex \
 
 
 # 执行命令
-ENTRYPOINT /bin/feishu
+ENTRYPOINT /usr/local/bin/feishu
