@@ -8,6 +8,7 @@ import (
 
 	"github.com/dronestock/drone"
 	"github.com/dronestock/feishu/internal/config"
+	"github.com/dronestock/feishu/internal/core"
 	"github.com/dronestock/feishu/internal/step/internal/constant"
 	"github.com/dronestock/feishu/internal/step/internal/feishu/message"
 	"github.com/dronestock/feishu/internal/step/internal/notify"
@@ -48,7 +49,7 @@ func (n *Notify) Run(ctx *context.Context) (err error) {
 	} else if request, mre := n.makeRequest(); nil != mre {
 		err = mre
 	} else {
-		err = n.send(ctx, request, token)
+		err = n.send(ctx, n.user, request, token)
 	}
 
 	return
@@ -84,10 +85,12 @@ func (n *Notify) makeRequest() (req *message.Request, err error) {
 	return
 }
 
-func (n *Notify) send(ctx *context.Context, req *message.Request, token string) (err error) {
+func (n *Notify) send(ctx *context.Context, receiver core.Receiver, req *message.Request, token string) (err error) {
 	rsp := new(message.Response)
-	idType := gox.StringBuilder(n.user.Type, constant.ReceiveTypeStaff).String()
-	http := n.base.Http().R().SetContext(*ctx).SetAuthToken(token).SetBody(req).SetResult(rsp)
+
+	req.Receive = receiver.Userid()
+	idType := gox.StringBuilder(receiver.Usertype(), constant.ReceiveTypeStaff).String()
+	http := n.base.Http().R().SetContext(*ctx).SetAuthToken(token).SetBody(req).SetResult(rsp).SetError(rsp)
 	if response, pe := http.SetQueryParam(constant.ReceiveType, idType).Post(constant.MessageUrl); nil != pe {
 		err = pe
 	} else if response.IsError() {
@@ -119,10 +122,8 @@ func (n *Notify) onError(
 	req *message.Request, rsp *message.Response,
 ) (err error) {
 	if constant.CodeUserNotfound == rsp.Code {
-		req.Receive = n.notfound.Id
-		req.Type = n.notfound.Type
 		n.base.Warn("未找到用户，发送消息给默认用户", field.New("user", n.user), field.New("notfound", n.notfound))
-		err = n.send(ctx, req, token)
+		err = n.send(ctx, n.notfound, req, token)
 	} else {
 		err = exception.New().Message("飞书返回错误").Field(field.New("response", string(response.Body()))).Build()
 	}
