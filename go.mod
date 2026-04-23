@@ -1,10 +1,10 @@
 module github.com/dronestock/feishu
 
-go 1.22
+go 1.23.0
 
 require (
 	github.com/dronestock/drone v1.2.4
-	github.com/go-resty/resty/v2 v2.13.0
+	github.com/go-resty/resty/v2 v2.17.2
 	github.com/goexl/exception v0.0.1
 	github.com/goexl/gox v0.4.4
 	github.com/rs/xid v1.6.0
@@ -28,8 +28,8 @@ require (
 	github.com/goexl/xiren v0.0.6 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
-	golang.org/x/crypto v0.23.0 // indirect
-	golang.org/x/net v0.25.0 // indirect
-	golang.org/x/sys v0.20.0 // indirect
-	golang.org/x/text v0.15.0 // indirect
+	golang.org/x/crypto v0.41.0 // indirect
+	golang.org/x/net v0.43.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/text v0.28.0 // indirect
 )
