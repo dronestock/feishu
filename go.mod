@@ -7,7 +7,7 @@ require (
 	github.com/go-resty/resty/v2 v2.13.0
 	github.com/goexl/exception v0.0.1
 	github.com/goexl/gox v0.4.4
-	github.com/rs/xid v1.5.0
+	github.com/rs/xid v1.6.0
 )
 
 require (
